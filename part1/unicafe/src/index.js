@@ -7,9 +7,36 @@ const Button = (props) => (
   </button>
 )
 
-const Display = props => <div>{props.name} {props.value}</div>
+// style={{fontSize: 24}}
+
+const Display = props => <tr><td>{props.name}</td><td> {props.value}</td></tr>
 
 const Title = props => <h1>{props.text}</h1>
+
+const Positive = props => <tr><td>positive</td><td> {props.values} %</td></tr>
+
+const Average = props => <tr><td>average</td><td>{props.values}</td></tr>
+
+const Statistics = (props) => {
+  if (props.all === 0) {
+    return (      
+      <div>No feedback given</div>
+    )
+  }
+
+  return (
+    <table><thead>
+      <Display name="good" value={props.good} />
+      <Display name="neutral" value={props.neutral} />
+      <Display name="bad" value={props.bad} />
+      <Display name="all" value={props.all} />
+      <Average values={(props.good - props.bad) / props.all} />
+      <Positive values={props.good / props.all * 100} />
+      </thead>
+
+    </table>
+  )
+}
 
 const App = () => {
   const [good, setGood] = useState(0)
@@ -31,19 +58,14 @@ const App = () => {
   }
 
   return (
-    <div>
+    <React.Fragment>
       <Title text="give feedback" />
       <Button handleClick={handleGoodClick} text="good" />
       <Button handleClick={handleNeutralClick} text="neutral" />
       <Button handleClick={handleBadClick} text="bad" />
       <Title text="statistics" />
-      <Display name="good" value={good} />
-      <Display name="neutral" value={neutral} />
-      <Display name="bad" value={bad} />
-      <Display name="all" value={all}/>
-      <Display name="average" value={(good - bad) / all} />
-      <Display name="positive" value={good / all}/>
-    </div>
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} />
+    </React.Fragment>
   )
 }
 
